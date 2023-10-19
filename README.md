@@ -13,3 +13,10 @@ This repository contains custom web components for a space web application. Thes
 <space-message encrypt timestamp name text>
 <space-input>
 ```
+
+## Import
+
+```html
+<link rel="stylesheet" href="https://edstudio.github.io/space-web-components/space.css">
+<script src="https://edstudio.github.io/space-web-components/space.js"></script>
+```
