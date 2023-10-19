@@ -1,0 +1,38 @@
+body {
+  margin: 0;
+  background-color: #181B20;
+  color: white;
+}
+
+space-layout {
+  display: flex;
+}
+
+space-userlist {
+  background-color: #262930;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  height: 100vh;
+  min-width: 200px;
+  border-right: 2px solid #2C313A;
+}
+
+space-useritem {
+  padding: 8px;
+}
+space-useritem:hover {
+  background-color: #2C313A;
+}
+
+space-messages {
+  display: block;
+  padding: 16px;
+}
+
+space-message {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}/*# sourceMappingURL=space.css.map */

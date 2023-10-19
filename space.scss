@@ -1,0 +1,45 @@
+// color variables
+$bg1: #262930;
+$bg2: #181B20;
+$bg3: #2C313A;
+$text1: #FFFFFF;
+$text2: #B3B3B3;
+
+body {
+    margin: 0;
+    background-color: $bg2;
+    color: white;
+}
+
+space-layout{
+    display: flex;
+}
+
+space-userlist {
+    background-color: $bg1;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    height: 100vh;
+    min-width: 200px;
+    border-right: 2px solid $bg3;
+}
+
+space-useritem {
+    padding: 8px;
+    &:hover {
+        background-color: $bg3;
+    }
+}
+
+space-messages{
+    display: block;
+    padding: 16px;
+}
+
+space-message {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+}
