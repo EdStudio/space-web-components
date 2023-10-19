@@ -40,13 +40,17 @@ class SpaceMessage extends HTMLElement {
   
   connectedCallback() {
     const encrypt_emoji = {
-      'false': '🔓',
-      'true': '🔒'
+      'false': '⚪',
+      'true': '🔵'
     }
-    
+
     this.innerHTML = `
-        <span>${this.name} ${encrypt_emoji[this.encrypt]} </span>
-        <span>${this.text}</span>
+        <span class="up">
+          <span class="encrypt">${encrypt_emoji[this.encrypt]}</span>
+          <span class="name">${this.name}</span>
+          <span class="date">${this.timestamp}</span>
+        </span>
+        <span class="down">${this.text}</span>
     `;
   }
 }
