@@ -1,3 +1,23 @@
+class SpaceHeader extends HTMLElement {
+  constructor() {
+    super();
+    this.name = this.getAttribute('name');
+  }
+
+  connectedCallback() {
+    this.innerHTML = this.name;
+  }
+
+  static get observedAttributes() {
+    return ['name'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    this[name] = newValue;
+    this.connectedCallback();
+  }
+}
+
 class SpaceUserItem extends HTMLElement {
   constructor() {
     super();
@@ -40,8 +60,8 @@ class SpaceInput extends HTMLElement {
     this.innerHTML = `<input type="text" placeholder="Message">`;
   }
 }
-  
-  
+
+customElements.define('space-header', SpaceHeader);
 customElements.define('space-useritem', SpaceUserItem);
 customElements.define('space-message', SpaceMessage);
 customElements.define('space-input', SpaceInput);
