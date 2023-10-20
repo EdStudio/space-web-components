@@ -32,13 +32,14 @@ class SpaceUserItem extends HTMLElement {
 class SpaceMessage extends HTMLElement {
   constructor() {
     super();
+  }
+  
+  connectedCallback() {
     this.encrypt = this.getAttribute('encrypt');
     this.timestamp = this.getAttribute('timestamp');
     this.name = this.getAttribute('name');
     this.text = this.getAttribute('text');
-  }
-  
-  connectedCallback() {
+
     const encrypt_emoji = {
       'false': '⚪',
       'true': '🔵'
