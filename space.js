@@ -62,7 +62,10 @@ class SpaceInput extends HTMLElement {
   }
   
   connectedCallback() {
-    this.innerHTML = `<input type="text" placeholder="Message">`;
+    this.innerHTML = `
+      <input type="text" placeholder="Message">
+      <span class="material-symbols-rounded">send</span>
+    `;
   }
 }
 
