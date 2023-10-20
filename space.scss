@@ -15,18 +15,43 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+$scrollbar-color: #bababa;
+$scrollbar-bg: #00000000;
+$srollbar-border: #00000000;
+$scrollbar-width: 8px;
+
+// Firefox
+* {
+    scrollbar-width: auto;
+    scrollbar-color: $scrollbar-color $srollbar-border;
+}
+
+// Chrome
+*::-webkit-scrollbar {
+    width: $scrollbar-width;
+}
+
+*::-webkit-scrollbar-track {
+    background: $scrollbar-bg;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-color;
+    border-radius: 10px;
+    border: 3px solid $srollbar-border;
+}
+
 space-layout {
     display: flex;
     height: 100vh;
 }
 
-space-list{
+space-list {
     background-color: $bg1;
     color: white;
     height: 100%;
     border-right: 2px solid $bg3;
 }
-
 
 space-userlist {
     display: flex;
