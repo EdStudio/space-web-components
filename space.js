@@ -69,7 +69,30 @@ class SpaceInput extends HTMLElement {
   }
 }
 
+class SpaceForm extends HTMLElement {
+  constructor() {
+    super();
+  }
+  
+  connectedCallback() {
+    const attributes = this.attributes;
+  
+    for (const attribute of attributes) {
+      console.log(`Nom de l'attribut : ${attribute.name}, Valeur de l'attribut : ${attribute.value}`);
+      const input = document.createElement('input');
+      input.setAttribute('type', attribute.name);
+      input.setAttribute('placeholder', attribute.name);
+      this.appendChild(input);
+    }
+    const button = document.createElement('button');
+    button.setAttribute('type', 'submit');
+    button.innerHTML = 'Submit';
+    this.appendChild(button);
+  }
+}
+
 customElements.define('space-header', SpaceHeader);
 customElements.define('space-useritem', SpaceUserItem);
 customElements.define('space-message', SpaceMessage);
 customElements.define('space-input', SpaceInput);
+customElements.define('space-form', SpaceForm);
