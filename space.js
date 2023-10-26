@@ -87,11 +87,15 @@ class SpaceAuth extends HTMLElement {
         <button class="register" type="submit">Register</button>
       </form>
     `;
-    
+
     const registerLink = this.querySelector('#goto-register');
     const loginLink = this.querySelector('#goto-login');
     registerLink.addEventListener('click', this.handleRegister.bind(this));
     loginLink.addEventListener('click', this.handleLogin.bind(this));
+    const authForm = this.querySelector('form');
+    authForm.addEventListener('submit', this.handleFormSubmit.bind(this));
+    const error_dom = this.querySelector('.error');
+    error_dom.innerHTML = "";
   }
 
   handleRegister() {
@@ -106,27 +110,70 @@ class SpaceAuth extends HTMLElement {
     authForm.className = 'login-form';
   }
 
+  handleFormSubmit(event) {
+    event.preventDefault();
+    this.handleSubmit();
+  }
+
+  successLogin(result) {
+    // Faire quelque chose avec le résultat
+    console.log('Fonction appelée avec succès. Résultat : ', result);
+    // Ajoute ici le code que tu veux exécuter lorsque la réponse a un code 200
+  }
+
   handleSubmit() {
     const authForm = this.querySelector('form');
-  
     const formData = new FormData(authForm);
-    const url = authForm.getAttribute('action');
-    const method = authForm.getAttribute('method');
-  
-    fetch(url, {
-      method: method,
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Réponse du serveur :', data);
-      // Fais quelque chose avec la réponse du serveur ici
-    })
-    .catch(error => {
-      console.error('Erreur lors de la requête :', error);
-      // Gère les erreurs ici
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const error_dom = this.querySelector('.error');
+    error_dom.innerHTML = "";
+
+    const username = formData.get('username');
+    const password = formData.get('password');
+
+    if (!username) {
+      error_dom.innerHTML = "Username is required";
+      return;
+    }
+    
+    if (!password) {
+      error_dom.innerHTML = "Password is required";
+      return;
+    }
+
+    const raw = JSON.stringify({
+      "username": formData.get('username'),
+      "password": formData.get('password')
     });
-  }  
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch("http://localhost:3000/auth", requestOptions)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.text();
+        }
+      })
+      .then(result => {
+        if (typeof result === 'object') {
+          this.successLogin(result);
+        } else {
+          error_dom.innerHTML = result;
+        }
+      })
+      .catch(error => {
+        console.log('error', error);
+        error_dom.innerHTML = error;
+      });
+  }
 }
 
 customElements.define('space-header', SpaceHeader);
