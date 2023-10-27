@@ -116,9 +116,18 @@ class SpaceAuth extends HTMLElement {
   }
 
   successLogin(result) {
-    // Faire quelque chose avec le résultat
-    console.log('Fonction appelée avec succès. Résultat : ', result);
-    // Ajoute ici le code que tu veux exécuter lorsque la réponse a un code 200
+    console.log(result);
+    const userid = result.auth.id;
+    const username = result.auth.username;
+    const email = result.auth.email;
+    if (!userid || !username || !email) {
+      console.error('Invalid user data', result);
+      return;
+    }
+    sessionStorage.setItem('userid', userid);
+    sessionStorage.setItem('username', username);
+    sessionStorage.setItem('email', email);
+    this.remove();
   }
 
   handleSubmit() {

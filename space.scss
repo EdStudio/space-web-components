@@ -16,6 +16,15 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+a{
+    color: #2a8bf2;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 $scrollbar-color: #bababa;
 $scrollbar-bg: #00000000;
 $srollbar-border: #00000000;
