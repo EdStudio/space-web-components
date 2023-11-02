@@ -40,6 +40,22 @@ class SpaceMessage extends HTMLElement {
     this.name = this.getAttribute('name');
     this.text = this.getAttribute('text');
 
+    const date = new Date(this.timestamp);
+    this.date_display = "Distorted space-time";
+    // si la date est aujourd'hui
+    if (date.toDateString() === new Date().toDateString()) {
+      // on affiche "Today at HH:MM"
+      this.date_display = 'Today at ' + date.toLocaleTimeString();
+    } 
+    // si la date est hier
+    else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()) {
+      this.date_display = 'Yesterday at ' + date.toLocaleTimeString();
+    }
+    else {
+      // sinon on affiche la date complète JJ/MM/AAAA HH:MM
+      this.date_display = date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
+    }
+
     const encrypt_emoji = {
       'false': '⚪',
       'true': '🔵'
@@ -49,7 +65,7 @@ class SpaceMessage extends HTMLElement {
         <span class="up">
           <span class="encrypt">${encrypt_emoji[this.encrypt]}</span>
           <span class="name">${this.name}</span>
-          <span class="date">${this.timestamp}</span>
+          <span class="date">${this.date_display}</span>
         </span>
         <span class="down">${this.text}</span>
     `;
