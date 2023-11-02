@@ -128,6 +128,9 @@ class SpaceAuth extends HTMLElement {
     sessionStorage.setItem('username', username);
     sessionStorage.setItem('email', email);
     this.remove();
+    //users.download();
+    const spaceUserList = document.createElement('space-userlist');
+    document.querySelector('space-list').appendChild(spaceUserList);
   }
 
   handleSubmit() {
@@ -145,7 +148,7 @@ class SpaceAuth extends HTMLElement {
       error_dom.innerHTML = "Username is required";
       return;
     }
-    
+
     if (!password) {
       error_dom.innerHTML = "Password is required";
       return;
@@ -176,7 +179,12 @@ class SpaceAuth extends HTMLElement {
         if (typeof result === 'object') {
           this.successLogin(result);
         } else {
-          error_dom.innerHTML = result;
+          try {
+            error_dom.innerHTML = JSON.parse(result).error;
+          }
+          catch (e) {
+            error_dom.innerHTML = result;
+          }
         }
       })
       .catch(error => {
@@ -186,8 +194,143 @@ class SpaceAuth extends HTMLElement {
   }
 }
 
+class SpaceUserlist extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  async connectedCallback() {
+    const data = await users.getAll();
+    for (const user of data) {
+      this.innerHTML += `<space-useritem name="${user.username}"></space-useritem>`;
+    }
+  }
+}
+
+class Users {
+  constructor() {
+    this.users = [];
+  }
+
+  add(user) {
+    this.users.push(user);
+  }
+
+  getByUsername(username) {
+    for (const user of this.users) {
+      if (user.username === username) {
+        return user;
+      }
+    }
+    return null;
+  }
+
+  getById(id) {
+    for (const user of this.users) {
+      if (user.id === id) {
+        return user;
+      }
+    }
+    return null;
+  }
+
+  async getAll() {
+    if (this.users.length === 0) {
+      await this.download();
+    }
+    return this.users;
+  }
+
+  successDownload(result) {
+    for (const user of result.users) {
+      this.add(new User(user.id, user.username, user.public_key, user.email, user.private_key));
+    }
+  }
+
+  async download() {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      credentials: 'include',
+      redirect: 'follow'
+    };
+
+    await fetch("http://localhost:3000/profiles", requestOptions)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.text();
+        }
+      })
+      .then(result => {
+        if (typeof result === 'object') {
+          this.successDownload(result);
+        } else {
+          console.log(result);
+        }
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  }
+}
+
+const users = new Users();
+
+class User {
+  constructor(id, username, publicKey = null, email = null, privateKey = null) {
+    this.id = id;
+    this.username = username;
+    this.publicKey = publicKey;
+    this.email = email;
+    this.privateKey = privateKey;
+  }
+}
+
+class Messages {
+  constructor() {
+    this.messages = [];
+  }
+  
+  add(message) {
+    this.messages.push(message);
+  }
+  
+  get(id) {
+    return this.messages.find(message => message.id === id);
+  }
+  
+  remove(id) {
+    this.messages = this.messages.filter(message => message.id !== id);
+  }
+  
+  getAll() {
+    return this.messages;
+  }
+}
+
+const messages = new Messages();
+
+class Message {
+  constructor(id, fromUserId, toUserId, message, isRead, createdAt, isEncrypted) {
+    this.id = id;
+    this.fromUserId = fromUserId;
+    this.toUserId = toUserId;
+    this.message = message;
+    this.isRead = isRead;
+    this.createdAt = createdAt;
+    this.isEncrypted = isEncrypted;
+  }  
+}
+
+
+
 customElements.define('space-header', SpaceHeader);
 customElements.define('space-useritem', SpaceUserItem);
 customElements.define('space-message', SpaceMessage);
 customElements.define('space-input', SpaceInput);
 customElements.define('space-auth', SpaceAuth);
+customElements.define('space-userlist', SpaceUserlist);
