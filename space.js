@@ -26,6 +26,10 @@ class SpaceUserItem extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = this.name;
+    this.addEventListener('click', () => {
+      document.querySelector('space-header').setAttribute('name', this.name);
+      document.querySelector('space-messages').setAttribute('name', this.name);
+    });
   }
 }
 
@@ -42,17 +46,13 @@ class SpaceMessage extends HTMLElement {
 
     const date = new Date(this.timestamp);
     this.date_display = "Distorted space-time";
-    // si la date est aujourd'hui
     if (date.toDateString() === new Date().toDateString()) {
-      // on affiche "Today at HH:MM"
       this.date_display = 'Today at ' + date.toLocaleTimeString();
     } 
-    // si la date est hier
     else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()) {
       this.date_display = 'Yesterday at ' + date.toLocaleTimeString();
     }
     else {
-      // sinon on affiche la date complète JJ/MM/AAAA HH:MM
       this.date_display = date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
     }
 
